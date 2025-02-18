@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="error-container">
+        <h2>Registro No Permitido</h2>
+        <p>{{ mensaje }}</p>
+        <a href="/empleado/{{ request.query_params.get('codigo', '/') }}" class="button">Volver al Home</a>
+    </div>
+{% endblock %}

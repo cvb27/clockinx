@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Registro de Asistencia para {{ empleado }}</h2>
+    
+    <form action="/marcar/{{ codigo }}" method="post">
+        <button type="submit" name="tipo" value="llegada">Registrar Llegada</button>
+        <button type="submit" name="tipo" value="salida">Registrar Salida</button>
+    </form>
+{% endblock %}

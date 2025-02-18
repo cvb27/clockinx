@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Historial de asistencia</h2>
+    <p>Mostrando historial para el empleado con código: {{ codigo }}</p>
+    
+    {% if registros %}
+        <table>
+            <tr>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Tipo</th>
+            </tr>
+            {% for row in registros %}
+            <tr>
+                <td>{{ row[1] }}</td>
+                <td>{{ row[2] }}</td>
+                <td>{{ row[3] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No hay registros disponibles.</p>
+    {% endif %}
+
+    <a href="{{ home_url }}" class="button">Home</a>
+    <a href="/logout" class="button">Cerrar Sesión</a>
+{% endblock %}  

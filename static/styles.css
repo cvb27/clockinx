@@ -1,0 +1,242 @@
+/* Estilos globales */
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 50px;
+    background-color: #f0f0f0;
+}
+
+/* Contenedor principal */
+.container {
+    padding: 20px;
+    border: 1px solid #ddd;
+    display: inline-block;
+    border-radius: 8px;
+    background: white;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 500px;
+    margin: auto;
+}
+
+/* Botón general */
+.button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    display: inline-block;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    text-align: center;
+}
+
+.button:hover {
+    background-color: #0056b3;
+}
+
+/* Estilos del encabezado */
+.header {
+    background-color: #333;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+}
+
+.nav {
+    display: flex;
+    gap: 20px;
+}
+
+.nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    padding: 10px;
+    transition: 0.3s;
+}
+
+.nav a:hover {
+    background-color: #555;
+    border-radius: 5px;
+}
+
+/* ✅ Estilos para el login page */
+.login-container {
+    width: 100%;
+    max-width: 400px; /* Mantiene el cuadro de login alineado */
+    margin: 0 auto; /* Centra el formulario */
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+/* Formulario (Login Page)*/
+/* Aqui se ajusto el error que los cuadros sobresalian*/
+
+form {
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+/* ✅ Corrección de tamaño en los inputs */
+/* Login Page*/
+input, button {
+    width: 90%; /* Evita que se salga del borde */
+    padding: 12px;
+    margin: 30px 0;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+/* Boton de inicio de sesion*/
+button {
+    width: 90%; /* Se ajusta dentro del cuadro */
+    padding: 12px;
+    margin-top: 30px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: center;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Contenedor de la tabla */
+.table-container {
+    margin: 20px auto;
+    overflow-x: auto;
+}
+
+/* Estilo de la tabla */
+table {
+    width: 100%;
+    max-width: 800px;
+    border-collapse: collapse;
+    margin: auto;
+    background: white;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #007BFF;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+.job-list {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+.job-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f9f9f9;
+    padding: 10px;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+/* Botón eliminar */
+.delete-button {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.delete-button:hover {
+    background-color: darkred;
+}
+/* Panel de administracion. */
+.admin-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 20px auto;
+}
+
+.admin-box {
+    flex: 1;
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    min-height: 550px;
+    width: 100%; /* Asegurar que cada columna ocupe el mismo ancho */
+}
+/* Ajustar el tamaño de los cuadros internos */
+/* ✅ Mantener alineado el contenido de empleados y trabajos */
+.employee-list, .job-list {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+}
+
+.employee-item, .job-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 15px; /* Aumentar el padding para más espacio */
+    border: 1px solid #ddd;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    font-size: 16px; /* Tamaño de letra más claro */
+}
+
+
+.delete-button {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.delete-button:hover {
+    background-color: darkred;
+}
+
+.logout-button {
+    display: block;
+    margin: 20px auto;
+    text-align: center;
+    width: fit-content;
+}
+/* Asegurar que el formulario de agregar trabajos también sea más ancho */
+.admin-box form input {
+    display: block;
+    width: 90%;
+    padding: 12px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;  /* Evita que padding haga que el input crezca */
+
+}

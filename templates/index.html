@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Registro de Asistencia</h2>
+    <p>Seleccione su nombre para marcar su entrada o salida.</p>
+    
+    <ul>
+        {% for empleado in empleados %}
+            <li><a href="/marcar/{{ empleado }}" class="button">{{ empleado | replace("_", " ") | title }}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}

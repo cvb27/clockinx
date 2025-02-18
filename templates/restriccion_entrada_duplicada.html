@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="error-container">
+        <h2>Registro No Permitido</h2>
+        <p>Error: Ya registraste una entrada hoy.</p>
+        <a href="/empleado/{{ codigo }}" class="button">Home</a>
+    </div>
+{% endblock %}

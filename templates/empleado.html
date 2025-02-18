@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Bienvenido, {{ empleado }}</h2>
+    <p>Selecciona una opción:</p>
+
+    {% if request.query_params.get('mensaje') %}
+        <p class="mensaje">{{ request.query_params.get('mensaje') }}</p>
+    {% endif %}
+
+    <form action="/marcar/{{ codigo }}" method="post">
+        <input type="hidden" name="tipo" value="entrada">
+        <button type="submit" class="button">Marcar Entrada</button>
+    </form>
+
+    <form action="/marcar/{{ codigo }}" method="post">
+        <input type="hidden" name="tipo" value="salida">
+        <button type="submit" class="button">Marcar Salida</button>
+    </form>
+
+    <a href="/empleado/{{ codigo }}" class="button">Home</a>
+    <a href="/historial/{{ codigo }}" class="button">Ver Historial</a>
+    <a href="/logout" class="button">Cerrar Sesión</a>
+{% endblock %}
+
