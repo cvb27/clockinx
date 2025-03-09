@@ -3,26 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}ClockIn{% endblock %}</title>
-    
-    <link rel="stylesheet" href="/static/styles.css">
-</head>
+    <title>{% block title %}Clockinx{% endblock %}</title>
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <link rel="stylesheet" href="/static/css/styles.css"></head>
 <body>
-
-<header class="header">
-    <div class="logo">Y&G GENERAL SERVICES LLC</div>
-        <nav class="nav">
-        <a href="{{ home_url }}" class="button">Home</a>
-        <a href="/logout" class="button">Cerrar Sesión</a>
-    </nav>
-</header>
-
-<main class="container">    
-    {% block content %}{% endblock %}
-</main>
-
+    <header class="header">
+        <div class="logo">Y&G GENERAL SERVICES LLC</div>
+            <nav class="nav">
+                <a href="{% if request.cookies.get('session') == 'admin' %}/admin{% else %}/empleado/{{ request.cookies.get('session') }}{% endif %}" class="button">Home</a>
+                <a href="/logout" class="button">Cerrar Sesión</a>
+           
+        </nav>
+    </header>   
+        {% block content %}{% endblock %}
+    </main>
 </body>
 </html>
-
 
 

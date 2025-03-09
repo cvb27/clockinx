@@ -1,0 +1,17 @@
+{
+    "empleados": {
+        "Carlos": {
+            "password": "1234",
+            "codigo": "418272"
+        },
+        "Guillermo": {
+            "password": "1234",
+            "codigo": "270514"
+        }
+    },
+    "administradores": {
+        "admin": {
+            "password": "1234"
+        }
+    }
+}

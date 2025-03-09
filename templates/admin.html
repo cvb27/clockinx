@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}ClockIn{% endblock %}</title>
-    
-    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="stylesheet" href="/static/css/styles.css">
 </head>
 <body>
 
@@ -26,12 +25,28 @@
         <h2>Equipo</h2>
         <ul class="employee-list">
             {% for empleado in empleados %}
+            {{ empleado.usuario }} - Código: {{ empleado.codigo }}
             <li class="employee-item">
-                {{ empleado.nombre }} Código: {{ empleado.codigo }}
+                
+                
                 <a href="/historial/{{ empleado.codigo }}" class="button">Ver Historial</a>
+                <form action="/admin/eliminar_empleado" method="post" style="display:inline;">
+                    <input type="hidden" name="usuario" value="{{ empleado.usuario }}">
+                    <button type="submit" class="button delete-button">Eliminar</button>
+                </form>
             </li>
             {% endfor %}
         </ul>
+    </section>
+
+    <!-- Agregar Empleado -->
+    <section class="admin-box">
+        <h2>Agregar Nuevo Empleado</h2>
+        <form action="/admin/agregar_empleado" method="post">
+            <input type="text" name="usuario" placeholder="Usuario del empleado" required>
+            <input type="password" name="password" placeholder="Contraseña" required>
+            <button type="submit" class="button">Agregar</button>
+        </form>
     </section>
 
     <!-- Contenedor de Trabajos -->
@@ -43,7 +58,6 @@
                 <span>{{ trabajo.nombre }} - {{ trabajo.direccion }}</span>
                 <form action="/admin/eliminar_trabajo" method="post" style="display:inline;">
                     <input type="hidden" name="nombre_trabajo" value="{{ trabajo.nombre }}">
-                    
                     <button type="submit" class="button delete-button">Eliminar</button>
                 </form>
             </li>

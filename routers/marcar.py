@@ -23,10 +23,10 @@ def registrar_evento(codigo: str, tipo: str):
     hora = fecha_hora.strftime("%H:%M:%S")
     hora_actual = fecha_hora.time()
 
-    limite_llegada_min = time(6, 30)
-    limite_llegada_max = time(12, 0)
+    limite_llegada_min = time(6, 25)
+    limite_llegada_max = time(13, 0)
     limite_salida_min = time(12, 0)
-    limite_salida_max = time(19, 0)
+    limite_salida_max = time(19, 30)
 
 # Lee registros existentes.
     registros = []
@@ -35,9 +35,9 @@ def registrar_evento(codigo: str, tipo: str):
             registros = list(csv.reader(file))
 
 # Verifica si ya registro entrada/salida hoy.    
-#    for row in registros:
-#        if row[0] == codigo and row[1] == fecha and row[3] == tipo:
-#            return f"restriccion_{tipo}_duplicada.html", f"Error: Ya registraste una {tipo} hoy."
+    for row in registros:
+        if row[0] == codigo and row[1] == fecha and row[3] == tipo:
+            return f"restriccion_{tipo}_duplicada.html", f"Error: Ya registraste una {tipo} hoy."
 
 # Verifica restricciones de horario.
 
@@ -53,7 +53,7 @@ def registrar_evento(codigo: str, tipo: str):
         writer = csv.writer(file)
         writer.writerow([codigo, fecha, hora, tipo])
 
-    return "Registro exitoso."
+    return None, "Registro exitoso."
 
 @router.post("/marcar/{codigo}")
 async def marcar_hora(request: Request, codigo: str, tipo: str = Form(...)):
@@ -61,13 +61,14 @@ async def marcar_hora(request: Request, codigo: str, tipo: str = Form(...)):
     Procesa la marcación de asistencia.
     """
 
-    mensaje = registrar_evento(codigo, tipo) # Procesa el registro con validaciones.
-
-     # Si el mensaje es un error relacionado con restricciones de salida, mostrar página con botón de regreso
-
+    # Procesa el registro con validaciones.
     template, mensaje = registrar_evento(codigo, tipo)
 
     if template:
         return templates.TemplateResponse(template, {"request": request, "mensaje": mensaje, "codigo": codigo})
 
     return RedirectResponse(url=f"/empleado/{codigo}?mensaje={mensaje}", status_code=303)
+
+
+    print(f"registrar_evento() devuelve: {resultado}")  # ✅ Depuración
+    return resultado

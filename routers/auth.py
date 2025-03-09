@@ -11,7 +11,7 @@ templates = Jinja2Templates(directory="templates")
 
 # Obtener la ruta absoluta del archivo usuarios.json
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # Directorio actual de routes/
-ARCHIVO_USUARIOS = os.path.join(BASE_DIR, "..", "usuarios.json")  # Ubicación en la raíz del proyecto
+ARCHIVO_USUARIOS = os.path.join(BASE_DIR, "..", "data/usuarios.json")  # Ubicación en la raíz del proyecto
 
 # Funcion para Cargar usuarios desde el JSON
 def cargar_usuarios():
@@ -38,15 +38,27 @@ async def login_page(request: Request):
 
 @router.post("/login")
 async def login(request: Request, response: Response, username: str = Form(...), password: str = Form(...)):
+
     USUARIOS = cargar_usuarios()
+
+     # Validar credenciales de empleados
     if username in USUARIOS["empleados"] and USUARIOS["empleados"][username]["password"] == password:
-        response = RedirectResponse(url=f"/empleado/{USUARIOS['empleados'][username]['codigo']}", status_code=303)
+        codigo_empleado = USUARIOS["empleados"][username].get("codigo")  # Obtener código, si existe
+        
+        if not codigo_empleado:  # Si no hay código, evitar error
+            return templates.TemplateResponse("login.html", {"request": request, "error": "Error en el sistema, falta código del usuario."})
+
+        response = RedirectResponse(url=f"/empleado/{codigo_empleado}", status_code=303)
         response.set_cookie(key="session", value=username, httponly=True)
         return response
+    
+      # Validar credenciales de administradores
     if username in USUARIOS["administradores"] and USUARIOS["administradores"][username]["password"] == password:
         response = RedirectResponse(url="/admin", status_code=303)
         response.set_cookie(key="session", value="admin", httponly=True)
         return response
+
+    # Si las credenciales son incorrectas, mostrar error en la página de login
     return templates.TemplateResponse("login.html", {"request": request, "error": "Usuario o contraseña incorrectos."})
 
 
@@ -59,10 +71,14 @@ def logout(response: Response):
     - Deshabilita el caché para evitar que el usuario pueda volver atrás y ver su sesión.
     """
     response = RedirectResponse(url="/login", status_code=303)
-    response.delete_cookie("session")
+
+    # ❌ Elimina la cookie de sesión correctamente
+    response.delete_cookie("session", path="/", domain=None)
 
     # Evita que el navegador guarde la sesión en caché
     response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
     response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+
 
     return response

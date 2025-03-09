@@ -1,8 +1,10 @@
 import json
 import os
+import random
 from fastapi import APIRouter, Request, Form
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse, RedirectResponse
+from routers.empleados import cargar_usuarios, guardar_usuarios
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
@@ -12,13 +14,6 @@ ARCHIVO_USUARIOS = os.path.join(BASE_DIR, "..", "usuarios.json")
 ARCHIVO_TRABAJOS = os.path.join(BASE_DIR, "..", "trabajos.json")
 
 
-def cargar_usuarios():
-    
-    # Carga la lista de empleados desde el archivo JSON.
-    if os.path.exists(ARCHIVO_USUARIOS):
-        with open(ARCHIVO_USUARIOS, "r") as file:
-            return json.load(file)
-    return {"empleados": {}, "administradores": {}}
 
 def cargar_trabajos():
     """Carga la lista de trabajos desde el archivo JSON."""
@@ -41,20 +36,20 @@ async def admin_panel(request: Request):
     Cada empleado tendrá un botón para ver su historial de asistencia.
     """
     USUARIOS = cargar_usuarios()
-    trabajos = cargar_trabajos()["trabajos"]
+    empleados = USUARIOS.get("empleados", {})  # ✅ Ahora empleados es un diccionario
+    trabajos = cargar_trabajos().get("trabajos", [])
+
+    empleados_lista = [{"usuario": usuario, "codigo": data.get("codigo", "Sin código")} for usuario, data in empleados.items()]
 
 
-    # Genera una lista de empleados con su nombre y código
-    empleados = [{"nombre": nombre, "codigo": data["codigo"]} for nombre, data in USUARIOS["empleados"].items()]
-
-    return templates.TemplateResponse("admin.html", {"request": request, "empleados": empleados, "trabajos":trabajos})
+    return templates.TemplateResponse("admin.html", {"request": request, "empleados": empleados_lista, "trabajos":trabajos})
 
 @router.post("/admin/agregar_trabajo")
 async def agregar_trabajo(nombre_trabajo: str = Form(...), direccion_trabajo: str = Form(...)):
     """
     Agrega un nuevo trabajo con nombre y direccion.
     """
-    trabajos = cargar_trabajos()["trabajos"]
+    trabajos = cargar_trabajos().get("trabajos",[])
     trabajos.append({"nombre": nombre_trabajo, "direccion": direccion_trabajo})
     guardar_trabajos(trabajos)
     return RedirectResponse(url="/admin", status_code=303)
@@ -64,16 +59,44 @@ async def eliminar_trabajo(nombre_trabajo: str = Form(...)):
     """
     Elimina un trabajo de la lista.
     """
-    trabajos_data = cargar_trabajos()
-    trabajos = trabajos_data["trabajos"]
-
-
-    # Verificamos si la lista tiene la estructura correcta (diccionarios con "nombre" y "direccion")
-    if isinstance(trabajos, list) and all(isinstance(t, dict) and "nombre" in t for t in trabajos):
-        trabajos_filtrados = [t for t in trabajos if t["nombre"] != nombre_trabajo]  # Filtra correctamente
-    else:
-        # Si los trabajos están en formato incorrecto, los convertimos en una lista de diccionarios
-        trabajos_filtrados = [{"nombre": t, "direccion": ""} for t in trabajos if t != nombre_trabajo]
-
+    trabajos = cargar_trabajos().get("trabajos", [])
+    trabajos_filtrados = [t for t in trabajos if t["nombre"] != nombre_trabajo]  # ✅ Filtrar correctamente
     guardar_trabajos(trabajos_filtrados)
+    return RedirectResponse(url="/admin", status_code=303)
+
+@router.post("/admin/agregar_empleado")
+async def agregar_empleado(usuario: str = Form(...), password: str = Form(...)):
+    """
+    Agrega un nuevo empleado al sistema con usuario y contraseña.
+    """
+    USUARIOS = cargar_usuarios()
+
+    # Verificar si el usuario ya existe
+    if usuario in USUARIOS.get("empleados", {}):
+        return RedirectResponse(url="/admin?error=Usuario ya existe", status_code=303)
+
+    # Generar un código único de 6 dígitos
+    codigo_generado = str(random.randint(100000, 999999))
+
+    # Asegurar que el código sea único
+    codigos_existentes = {data["codigo"] for data in USUARIOS["empleados"].values() if "codigo" in data}
+    while codigo_generado in codigos_existentes:
+        codigo_generado = str(random.randint(100000, 999999))
+
+    # Agregar nuevo empleado con codigo
+    USUARIOS["empleados"][usuario] = {"password": password, "codigo": codigo_generado}
+    guardar_usuarios(USUARIOS)
+    return RedirectResponse(url="/admin", status_code=303)
+
+@router.post("/admin/eliminar_empleado")
+async def eliminar_empleado(usuario: str = Form(...)):
+    """
+    Elimina un empleado del sistema.
+    """
+    USUARIOS = cargar_usuarios()
+    
+    if usuario in USUARIOS.get("empleados", {}):
+        del USUARIOS["empleados"][usuario]
+        guardar_usuarios(USUARIOS)
+    
     return RedirectResponse(url="/admin", status_code=303)
