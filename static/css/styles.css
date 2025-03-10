@@ -1,12 +1,115 @@
-
+/* 🎨 Mantiene los estilos actuales */
 /* Estilos globales */
 body {
     font-family: Arial, sans-serif;
     text-align: center;
-    margin: 50px;
     background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
 }
 
+/* 🌐 Estilos del encabezado */
+.header {
+    background-color: #333;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+}
+/* 📌 Mejorar menú en móviles */
+.nav {
+    display: flex;
+    gap: 20px;
+}
+
+/* 📱 Estilos para dispositivos móviles */
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    .nav {
+        display: none; /* Oculta el menú en móviles hasta que se active */
+        flex-direction: column;
+        width: 100%;
+        text-align: center;
+    }
+
+    .nav.active {
+        display: flex; /* Mostrar menú cuando esté activo */
+    }
+
+    .nav a {
+        padding: 10px;
+        display: block;
+        width: 100%;
+        background: #444;
+        color: white;
+        border-bottom: 1px solid #555;
+    }
+
+    .menu-icon {
+        display: block;
+        font-size: 24px;
+        cursor: pointer;
+        padding: 10px;
+    }
+}
+
+/* 📋 Mejoras para las tablas en móviles */
+.table-container {
+    overflow-x: auto; /* Agrega scroll en móviles */
+    width: 100%;
+}
+
+table {
+    width: 100%;
+    max-width: 800px;
+    border-collapse: collapse;
+    margin: auto;
+    background: white;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+/* 📱 En móviles, reducir tamaño de fuente en las tablas */
+@media (max-width: 600px) {
+    table {
+        font-size: 14px;
+    }
+
+    th, td {
+        padding: 8px;
+    }
+}
+
+/* 🔘 Botones más grandes en móviles */
+.button {
+    background-color: blue;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    display: inline-block;
+    text-align: center;
+    border-radius: 5px;
+}
+
+/* 📱 Ajustar botones en móviles */
+@media (max-width: 600px) {
+    .button {
+        width: 100%;
+        padding: 15px;
+        font-size: 1.2rem;
+    }
+}
 /* Contenedor principal */
 .container {
     padding: 20px;
